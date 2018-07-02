@@ -18,7 +18,7 @@ AUTHOR = metadata.get('author', 'Brett Morris')
 AUTHOR_EMAIL = metadata.get('author_email', '')
 LICENSE = metadata.get('license', 'unknown')
 URL = metadata.get('url', 'http://github.com/bmorris3/stash')
-__minimum_python_version__ = metadata.get("minimum_python_version", "3.6")
+__minimum_python_version__ = metadata.get("minimum_python_version", "3.5")
 
 # Enforce Python version check - this is the same check as in __init__.py but
 # this one has to happen before importing ah_bootstrap.

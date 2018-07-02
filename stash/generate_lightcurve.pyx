@@ -24,6 +24,24 @@ def rebin(arr, R_planet_pixels_upper, supersample_factor):
 @cython.wraparound(False)   # Deactivate negative indexing.
 def generate_lightcurve(image, R_planet_pixels=17.26, background=269,
                         supersample_factor=4):
+    """
+
+    Parameters
+    ----------
+    image : `~np.ndarray`
+        SDO HMI image
+    R_planet_pixels : float
+        Radius of planet in pixels
+    background : float
+        Backgorund flux in counts
+    supersample_factor : int
+        Supersample the planet pixelation by a factor ``supersample_factor``
+
+    Returns
+    -------
+    fluxes : `~np.ndarray`
+        Array of fluxes
+    """
     cdef int R_planet_pixels_upper = int((R_planet_pixels+1)//1)
     cdef float R_planet_pixels_squared = R_planet_pixels**2
     cdef int n_images = 4096 - 2 * R_planet_pixels_upper

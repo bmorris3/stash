@@ -43,7 +43,7 @@ class LightCurve(object):
 
         Returns
         -------
-        lc : `~hcts.LightCurve`
+        lc : `~stash.LightCurve`
             Best-fit transit model
         """
         def transit_model(p):
