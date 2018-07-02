@@ -22,7 +22,7 @@ def rebin(arr, R_planet_pixels_upper, supersample_factor):
 
 @cython.boundscheck(False)  # Deactivate bounds checking
 @cython.wraparound(False)   # Deactivate negative indexing.
-def generate_lightcurve(image, R_planet_pixels=17.26, background=269,
+def generate_lightcurve(image, b_pixels, R_planet_pixels=17.26, background=269,
                         supersample_factor=4):
     """
 
@@ -54,7 +54,7 @@ def generate_lightcurve(image, R_planet_pixels=17.26, background=269,
     cdef np.ndarray fluxes = np.zeros(n_images, dtype=DTYPE)
     cdef float unobscured_flux, obscured_flux, r_pixel
 
-    cdef int planet_center_y = 1680
+    cdef int planet_center_y = 1680 - b_pixels
     cdef int planet_center_x = 4096 - R_planet_pixels_upper
 
     cdef int planet_centroid_x, planet_centroid_y

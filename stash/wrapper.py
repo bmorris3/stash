@@ -8,7 +8,7 @@ __all__ = ['simulate_lightcurve']
 from .lightcurve import LightCurve
 
 
-def simulate_lightcurve(image, period, a, R_planet_physical=R_earth,
+def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
                         background=269, R_star_physical=R_sun):
     """
     Simulate a light curve of a planet with radius ``R_planet_physical`` with
@@ -23,6 +23,8 @@ def simulate_lightcurve(image, period, a, R_planet_physical=R_earth,
         Orbital period of the planet
     a : `~astropy.units.Quantity`
         Semimajor axis of the planet in absolute units
+    b : float
+        Impact parameter (defined on [0, 1])
     R_planet_physical : `~astropy.units.Quantity`
         Radius of the planet
     R_star_physical : `~astropy.units.Quantity`
@@ -42,6 +44,7 @@ def simulate_lightcurve(image, period, a, R_planet_physical=R_earth,
     diff = np.diff(np.sum(image, axis=1))
     left, right = np.argmax(diff), np.argmin(diff)
     star_width_pixels = right - left
+    b_pixels = star_width_pixels/2 * b
 
     # Compute approximate width of each pixel in physical units
     star_width = 2 * R_star_physical
@@ -54,10 +57,11 @@ def simulate_lightcurve(image, period, a, R_planet_physical=R_earth,
     radius_planet_pixels = (R_planet_physical / distance_per_pixel).value
 
     # Call the light curve generating function
-    fluxes = lc.generate_lightcurve(image, R_planet_pixels=radius_planet_pixels,
+    fluxes = lc.generate_lightcurve(image, b_pixels,
+                                    R_planet_pixels=radius_planet_pixels,
                                     background=background)
 
     times = np.arange(0, len(fluxes)) * time_per_step
     times -= times.mean()
 
-    return LightCurve(times, fluxes)
+    return LightCurve(times, fluxes/np.nanmax(fluxes))
