@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Getting Started &#8212; stash v0.0.dev08</title>
+    <link rel="stylesheet" href="../_static/bootstrap-astropy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.dev08',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Installing stash" href="install.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../_static/copybutton.js"></script>
+
+
+  </head>
+  <body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../index.html"><span id="logotext1">stash</span><span id="logotext2"></span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="install.html" title="Installing stash">
+	  &laquo; previous
+	</a>
+	
+      </li>
+      <li>
+	<a href="../index.html">stash v0.0.dev08</a>
+	 &#187;
+      </li>
+      
+      <li>Getting Started</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fetching-an-image-with-fido">
+<h2>Fetching an image with Fido<a class="headerlink" href="#fetching-an-image-with-fido" title="Permalink to this headline">¶</a></h2>
+<p>For this demo, we’ll be using sunpy and matplotlib. Let’s do some imports:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sunpy.net</span> <span class="k">import</span> <span class="n">Fido</span><span class="p">,</span> <span class="n">attrs</span> <span class="k">as</span> <span class="n">a</span>
+<span class="kn">from</span> <span class="nn">sunpy.map</span> <span class="k">import</span> <span class="n">Map</span>
+</pre></div>
+</div>
+<p>Great! Now we’ll use Fido to search between two times for an image taken by
+SDO/HMI in continuum intensity mode:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Use fido to search for an SDO HMI continuum intensity image</span>
+<span class="c1"># between the two times below</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">Fido</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="s1">&#39;2013/5/13 15:55&#39;</span><span class="p">,</span> <span class="s1">&#39;2013/5/13 15:55:30&#39;</span><span class="p">),</span>
+                     <span class="n">a</span><span class="o">.</span><span class="n">Instrument</span><span class="p">(</span><span class="s1">&#39;HMI&#39;</span><span class="p">),</span> <span class="n">a</span><span class="o">.</span><span class="n">vso</span><span class="o">.</span><span class="n">Physobs</span><span class="p">(</span><span class="s1">&#39;intensity&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The variable <code class="docutils literal"><span class="pre">result</span></code> stores the information about the images that match the
+search criteria. if we feed it to <code class="docutils literal"><span class="pre">Fido.fetch</span></code>, <code class="docutils literal"><span class="pre">sunpy</span></code> will download the
+image:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Download the file(s) found to the `data` directory</span>
+<span class="n">downloaded_files</span> <span class="o">=</span> <span class="n">Fido</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;data/.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can open the downloaded image using <code class="xref py py-obj docutils literal"><span class="pre">Map</span></code>, like so:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Use Sunpy to open up the image</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">Map</span><span class="p">(</span><span class="n">downloaded_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>and finally we can see what the map looks like with:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># and use sunpy&#39;s built-in features to plot it</span>
+<span class="n">m</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>which gives us the following awesome plot!</p>
+<p>(<a class="reference external" href="../stash/gettingstarted-1.py">Source code</a>, <a class="reference external" href="../stash/gettingstarted-1.png">png</a>, <a class="reference external" href="../stash/gettingstarted-1.hires.png">hires.png</a>, <a class="reference external" href="../stash/gettingstarted-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/gettingstarted-1.png" src="../_images/gettingstarted-1.png" />
+</div>
+</div>
+<div class="section" id="simulating-a-transit">
+<h2>Simulating a transit<a class="headerlink" href="#simulating-a-transit" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have an image of the Sun to work with, let’s simulate a transit of
+an Earth-like planet transiting the Sun.</p>
+<p>As with before, we’ll have a bunch of packages to import things from:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+<span class="kn">from</span> <span class="nn">astropy.constants</span> <span class="k">import</span> <span class="n">R_earth</span><span class="p">,</span> <span class="n">R_sun</span>
+<span class="kn">from</span> <span class="nn">sunpy.map</span> <span class="k">import</span> <span class="n">Map</span>
+<span class="kn">from</span> <span class="nn">stash</span> <span class="k">import</span> <span class="n">simulate_lightcurve</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<p>The first thing we’ll do is open up the image that we downloaded in the previous
+example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Load image from the `fetch_and_plot_example.py` script</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">Map</span><span class="p">(</span><span class="s1">&#39;data/hmi_ic_45s_2013_05_13_15_56_15_tai_continuum.fits&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>That’s the image of the Sun that we’ll simulate a transit on top of. Now let’s
+define some characteristics of the planet that will be doing the transiting:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Set up planet parameters</span>
+<span class="n">orbital_period</span> <span class="o">=</span> <span class="mi">365</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">day</span>
+<span class="n">semimajor_axis</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">impact_parameter</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">R_planet</span> <span class="o">=</span> <span class="n">R_earth</span>
+<span class="n">R_star</span> <span class="o">=</span> <span class="n">R_sun</span>
+</pre></div>
+</div>
+<p>The impact parameter <code class="docutils literal"><span class="pre">b</span></code> is defined on [-1, 1], and describes how far from the
+center of the solar disk, in units of solar radii, the planet appears to cross
+over. A planet that transits the solar equator has <code class="docutils literal"><span class="pre">b=0</span></code>. A planet that just
+barely grazes the tip of the Sun has <code class="docutils literal"><span class="pre">b=0.5</span></code>. (For well-aligned planets, you
+can convert between the solar latitude being occulted and the impact parameter
+by noting that <span class="math">\(b = \sin \theta\)</span>, where <span class="math">\(\theta\)</span> is the latitude.)</p>
+<p>Now we call the <a class="reference internal" href="../api/stash.simulate_lightcurve.html#stash.simulate_lightcurve" title="stash.simulate_lightcurve"><code class="xref py py-obj docutils literal"><span class="pre">simulate_lightcurve</span></code></a> function to simulate a light curve
+of a transit of this planet on our image, <code class="docutils literal"><span class="pre">image</span></code>:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Simulate a light curve for that system, return a `LightCurve` object</span>
+<span class="n">lc</span> <span class="o">=</span> <span class="n">simulate_lightcurve</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">orbital_period</span><span class="p">,</span> <span class="n">semimajor_axis</span><span class="p">,</span>
+                         <span class="n">impact_parameter</span><span class="p">,</span> <span class="n">R_planet</span><span class="p">,</span> <span class="n">R_star</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can plot the light curve using the built-in plot function:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Plot the resulting light curve</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+<span class="c1"># Show me the plot!</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and we’ll see something like this:</p>
+<p>(<a class="reference external" href="../stash/gettingstarted-2.py">Source code</a>, <a class="reference external" href="../stash/gettingstarted-2.png">png</a>, <a class="reference external" href="../stash/gettingstarted-2.hires.png">hires.png</a>, <a class="reference external" href="../stash/gettingstarted-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/gettingstarted-2.png" src="../_images/gettingstarted-2.png" />
+</div>
+<p>Would you look at that –– the planet occulted a starspot, causing the apparent
+brightness to temporarily increase during the transit, because less flux was
+missing when the planet was over the spot, compared to when the planet is over
+the typically bright photosphere. Now we’re cooking!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#fetching-an-image-with-fido">Fetching an image with Fido</a></li>
+<li><a class="reference internal" href="#simulating-a-transit">Simulating a transit</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="http://github.com/bmorris3/stash/tree/master/docs/stash/gettingstarted.rst">Edit This Page on Github</a> &nbsp;
+    <a href="../_sources/stash/gettingstarted.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2018, Brett Morris.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
+    Last built 02 Jul 2018. <br/>
+  </p>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+primes
+======
+
+.. currentmodule:: stash
+
+.. autofunction:: primes

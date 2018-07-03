@@ -1,0 +1,6 @@
+do_primes
+=========
+
+.. currentmodule:: stash
+
+.. autofunction:: do_primes

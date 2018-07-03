@@ -1,0 +1,19 @@
+LightCurve
+==========
+
+.. currentmodule:: stash
+
+.. autoclass:: LightCurve
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~LightCurve.get_transit_model
+      ~LightCurve.plot
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get_transit_model
+   .. automethod:: plot

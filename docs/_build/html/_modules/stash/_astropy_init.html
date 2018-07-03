@@ -1,0 +1,157 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>stash._astropy_init &#8212; stash v0.0.dev08</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-astropy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.dev08',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../_static/copybutton.js"></script>
+
+
+  </head>
+  <body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../index.html"><span id="logotext1">stash</span><span id="logotext2"></span><span id="logotext3">:docs</span></a>
+  <ul>
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../index.html">stash v0.0.dev08</a>
+	 &#187;
+      </li>
+      <li><a href="../index.html" >Module code</a> &#187;</li>
+      <li><a href="../stash.html" accesskey="U">stash</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for stash._astropy_init</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Licensed under a 3-clause BSD style license - see LICENSE.rst</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__version__&#39;</span><span class="p">,</span> <span class="s1">&#39;__githash__&#39;</span><span class="p">]</span>
+
+<span class="c1"># this indicates whether or not we are in the package&#39;s setup.py</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">_ASTROPY_SETUP_</span>
+<span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">version_info</span>
+    <span class="k">if</span> <span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">builtins</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">__builtin__</span> <span class="k">as</span> <span class="nn">builtins</span>
+    <span class="n">builtins</span><span class="o">.</span><span class="n">_ASTROPY_SETUP_</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.version</span> <span class="k">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">__version__</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.version</span> <span class="k">import</span> <span class="n">githash</span> <span class="k">as</span> <span class="n">__githash__</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">__githash__</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_ASTROPY_SETUP_</span><span class="p">:</span>  <span class="c1"># noqa</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+    <span class="kn">from</span> <span class="nn">astropy.config.configuration</span> <span class="k">import</span> <span class="p">(</span>
+        <span class="n">update_default_config</span><span class="p">,</span>
+        <span class="n">ConfigurationDefaultMissingError</span><span class="p">,</span>
+        <span class="n">ConfigurationDefaultMissingWarning</span><span class="p">)</span>
+
+    <span class="c1"># Create the test function for self test</span>
+    <span class="kn">from</span> <span class="nn">astropy.tests.runner</span> <span class="k">import</span> <span class="n">TestRunner</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">TestRunner</span><span class="o">.</span><span class="n">make_test_runner_in</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+    <span class="n">__all__</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span>
+
+    <span class="c1"># add these here so we only need to cleanup the namespace at the end</span>
+    <span class="n">config_dir</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ASTROPY_SKIP_CONFIG_UPDATE&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">config_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+        <span class="n">config_template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="n">__package__</span> <span class="o">+</span> <span class="s2">&quot;.cfg&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">config_template</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">update_default_config</span><span class="p">(</span>
+                    <span class="n">__package__</span><span class="p">,</span> <span class="n">config_dir</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">orig_error</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">update_default_config</span><span class="p">(</span><span class="n">__package__</span><span class="p">,</span> <span class="n">config_dir</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">ConfigurationDefaultMissingError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">wmsg</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span>
+                            <span class="s2">&quot; Cannot install default profile. If you are &quot;</span>
+                            <span class="s2">&quot;importing from source, this is expected.&quot;</span><span class="p">)</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="n">ConfigurationDefaultMissingWarning</span><span class="p">(</span><span class="n">wmsg</span><span class="p">))</span>
+                    <span class="k">del</span> <span class="n">e</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">orig_error</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2018, Brett Morris.<br/>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5. &nbsp;
+    Last built 02 Jul 2018. <br/>
+  </p>
+</footer>
+  </body>
+</html>

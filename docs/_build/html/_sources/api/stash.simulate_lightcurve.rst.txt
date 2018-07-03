@@ -1,0 +1,6 @@
+simulate_lightcurve
+===================
+
+.. currentmodule:: stash
+
+.. autofunction:: simulate_lightcurve
