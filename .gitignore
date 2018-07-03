@@ -1,3 +1,10 @@
 *.pyc
 *.fits
 docs/_build/*
+.idea/*
+*.c
+*version.py
+*.egg-info/
+build/*
+dist/*
+docs/api/*
