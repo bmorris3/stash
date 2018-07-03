@@ -1,6 +1,0 @@
-test
-====
-
-.. currentmodule:: stash
-
-.. autofunction:: test

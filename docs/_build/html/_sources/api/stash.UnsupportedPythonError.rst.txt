@@ -1,6 +1,0 @@
-UnsupportedPythonError
-======================
-
-.. currentmodule:: stash
-
-.. autoexception:: UnsupportedPythonError

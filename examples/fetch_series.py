@@ -23,7 +23,7 @@ paths = glob('data/*continuum.fits')
 if len(paths) < 10:
     # Download four hours worth of images from JSOC, at ``cadence``
     client = jsoc.JSOCClient()
-    response = client.search(a.jsoc.Time('2013/5/13 12:00', '2013/5/13 23:59'),
+    response = client.search(a.jsoc.Time('2013/5/13 00:00', '2013/5/13 23:59'),
                              a.jsoc.Series('hmi.Ic_45s'),
                              a.jsoc.Notify("brettmorris21@gmail.com"),
                              a.vso.Sample(cadence))

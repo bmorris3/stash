@@ -1,6 +1,0 @@
-generate_lightcurve
-===================
-
-.. currentmodule:: stash
-
-.. autofunction:: generate_lightcurve
