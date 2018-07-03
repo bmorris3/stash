@@ -13,6 +13,9 @@ DTYPE = np.float32
 @cython.boundscheck(False)  # Deactivate bounds checking
 @cython.wraparound(False)   # Deactivate negative indexing.
 def rebin(arr, R_planet_pixels_upper, supersample_factor):
+    if supersample_factor == 1:
+        return arr
+
     cdef list new_shape = [2*R_planet_pixels_upper, 2*R_planet_pixels_upper]
     cdef list shape = [new_shape[0], arr.shape[0] // new_shape[0],
                        new_shape[1], arr.shape[1] // new_shape[1]]

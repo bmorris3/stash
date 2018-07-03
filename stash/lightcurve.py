@@ -4,7 +4,7 @@ import batman
 import matplotlib.pyplot as plt
 from copy import deepcopy
 
-__all__ = ['LightCurve']
+__all__ = ['LightCurve', 'transit_duration']
 
 
 class LightCurve(object):
@@ -23,8 +23,8 @@ class LightCurve(object):
         self.times = times
         self.fluxes = fluxes
 
-    def plot(self):
-        plt.plot(self.times, self.fluxes)
+    def plot(self, *args, **kwargs):
+        plt.plot(self.times, self.fluxes, *args, **kwargs)
 
     def get_transit_model(self, init_params, yerr):
         """
@@ -73,3 +73,34 @@ class LightCurve(object):
                                approx_grad=True,
                                bounds=[[0, 90], [0, 0.5], [-1, 1], [-1, 1]])[0]
         return LightCurve(self.times, transit_model(result))
+
+
+def transit_duration(R_star, R_planet, orbital_period, semimajor_axis,
+                     impact_parameter):
+    """
+    Compute transit duration from first through fourth contact given orbital
+    and physical parameters.
+
+    Parameters
+    ----------
+    R_star : `~astropy.units.Quantity`
+        Stellar radius
+    R_planet : `~astropy.units.Quantity`
+        Planet radius
+    orbital_period : `~astropy.units.Quantity`
+        Orbital period
+    semimajor_axis : `~astropy.units.Quantity`
+        Orbital semimajor axis
+    impact_parameter : float
+        Impact parameter (-1, 1)
+
+    Returns
+    -------
+    duration : `~astropy.units.Quantity`
+        Transit duration from first through fourth contact.
+    """
+    inclination = np.arccos(impact_parameter / float(semimajor_axis/R_star))
+    return orbital_period / np.pi * np.arcsin(np.sqrt(float(R_star/semimajor_axis) *
+                                                      np.sqrt((1+float(R_planet/R_star))**2 -
+                                                              impact_parameter**2) /
+                                                      np.sin(inclination)))

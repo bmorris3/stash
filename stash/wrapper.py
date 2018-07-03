@@ -9,7 +9,8 @@ from .lightcurve import LightCurve
 
 
 def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
-                        background=269, R_star_physical=R_sun):
+                        background=269, R_star_physical=R_sun,
+                        supersample_factor=1):
     """
     Simulate a light curve of a planet with radius ``R_planet_physical`` with
     orbital period ``period``,  semimajor axis ``a``, and assuming the Sun has
@@ -59,7 +60,8 @@ def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
     # Call the light curve generating function
     fluxes = lc.generate_lightcurve(image, b_pixels,
                                     R_planet_pixels=radius_planet_pixels,
-                                    background=background)
+                                    background=background,
+                                    supersample_factor=supersample_factor)
 
     times = np.arange(0, len(fluxes)) * time_per_step
     times -= times.mean()

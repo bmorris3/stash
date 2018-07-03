@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
+# scp -r docs/_build/html/* bmmorris@vergil.u.washington.edu:/da00/d50/bmmorris/public_html/stash/.
+
 import glob
 import os
 import sys
