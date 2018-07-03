@@ -8,3 +8,5 @@ In development
   :maxdepth: 2
 
   stash/index.rst
+  stash/install.rst
+  stash/gettingstarted.rst
