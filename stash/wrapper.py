@@ -6,7 +6,7 @@ from . import generate_lightcurve as lc
 __all__ = ['simulate_lightcurve']
 
 from .lightcurve import LightCurve
-
+import warnings
 
 def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
                         background=269, R_star_physical=R_sun,
@@ -38,8 +38,10 @@ def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
     """
 
     # Replace nans with background value
-    image[np.isnan(image)] = np.percentile(image[(image < 500) & (image > 100)],
-                                           10)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        image[np.isnan(image)] = np.percentile(image[(image < 500) &
+                                                     (image > 100)], 10)
 
     # Measure apparent width of star in pixels
     diff = np.diff(np.sum(image, axis=1))

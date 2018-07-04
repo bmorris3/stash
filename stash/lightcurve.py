@@ -24,7 +24,11 @@ class LightCurve(object):
         self.fluxes = fluxes
 
     def plot(self, *args, **kwargs):
-        plt.plot(self.times, self.fluxes, *args, **kwargs)
+        if kwargs.get('ax') is not None:
+            ax = kwargs.pop('ax')
+            ax.plot(self.times, self.fluxes, *args, **kwargs)
+        else:
+            plt.plot(self.times, self.fluxes, *args, **kwargs)
 
     def get_transit_model(self, init_params, yerr):
         """
@@ -47,9 +51,10 @@ class LightCurve(object):
             Best-fit transit model
         """
         def transit_model(p):
-            inc, t0, u1, u2 = p
+            rp, inc, t0, u1, u2 = p
 
             trial_params = deepcopy(init_params)
+            trial_params.rp = rp
             trial_params.inc = inc
             trial_params.t0 = t0
             trial_params.u = [u1, u2]
@@ -68,10 +73,12 @@ class LightCurve(object):
 
         from scipy.optimize import fmin_l_bfgs_b
 
-        result = fmin_l_bfgs_b(chi2, [init_params.inc, init_params.t0,
-                                      init_params.u[0], init_params.u[1]],
+        result = fmin_l_bfgs_b(chi2, [init_params.rp, init_params.inc,
+                                      init_params.t0, init_params.u[0],
+                                      init_params.u[1]],
                                approx_grad=True,
-                               bounds=[[0, 90], [0, 0.5], [-1, 1], [-1, 1]])[0]
+                               bounds=[[0, 1], [0, 90], [-0.5, 0.5], [-1, 1],
+                                       [-1, 1]])[0]
         return LightCurve(self.times, transit_model(result))
 
 
@@ -100,7 +107,8 @@ def transit_duration(R_star, R_planet, orbital_period, semimajor_axis,
         Transit duration from first through fourth contact.
     """
     inclination = np.arccos(impact_parameter / float(semimajor_axis/R_star))
-    return orbital_period / np.pi * np.arcsin(np.sqrt(float(R_star/semimajor_axis) *
-                                                      np.sqrt((1+float(R_planet/R_star))**2 -
-                                                              impact_parameter**2) /
-                                                      np.sin(inclination)))
+    # Winn 2011 (Eqn 14)
+    return orbital_period / np.pi * np.arcsin(float(R_star/semimajor_axis) *
+                                              np.sqrt((1+float(R_planet/R_star))**2 -
+                                                      impact_parameter**2) /
+                                              np.sin(inclination))

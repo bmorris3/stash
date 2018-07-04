@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 from sunpy.net import jsoc, attrs as a
 import astropy.units as u
 from astropy.constants import R_earth, R_sun
-from sunpy.map import Map
+from astropy.io import fits
 from stash import simulate_lightcurve, transit_duration
 from glob import glob
 from astropy.time import Time
 import numpy as np
+from astropy.utils.console import ProgressBar
 
 # Set the HMI observing cadence (should be smaller than convective timescale)
 cadence = 5 * u.min
@@ -14,13 +15,13 @@ cadence = 5 * u.min
 orbital_period = 365 * u.day
 semimajor_axis = 1 * u.AU
 impact_parameter = 0.2
-R_planet = R_earth
+R_planet = 1 * R_earth
 R_star = R_sun
 
 paths = glob('data/*continuum.fits')
 
 # If you haven't already done the download...
-if len(paths) < 10:
+if len(paths) < 1:
     # Download four hours worth of images from JSOC, at ``cadence``
     client = jsoc.JSOCClient()
     response = client.search(a.jsoc.Time('2013/5/13 00:00', '2013/5/13 23:59'),
@@ -44,19 +45,26 @@ duration = transit_duration(R_star, R_planet, orbital_period, semimajor_axis,
 # number of frames needed for transit simulation:
 n_frames = int(float(duration/cadence))
 
-# Make a light curve for each image
-for path in paths[:n_frames]:
-    map = Map(path)
-    image = map.data
-    time = Time(map.date).jd
+# Make a command line progress bar that shows estimated runtime:
+with ProgressBar(n_frames) as bar:
 
-    # Simulate a light curve for that system, return a `LightCurve` object
-    lc = simulate_lightcurve(image, orbital_period, semimajor_axis,
-                             impact_parameter, R_planet, R_star,
-                             supersample_factor=1)
+    # Make a light curve for each image
+    for path in paths[:n_frames]:
 
-    lcs.append(lc)
-    times.append(time)
+        # Open the image, the fastest way:
+        f = fits.open(path, memmap=False, lazy_load_hdus=True)
+        f[1].verify('silentfix')
+        image = f[1].data
+        time = Time(f[1].header['DATE-OBS'], format='isot', scale='tai').jd
+
+        # Simulate a light curve for that system, return a `LightCurve` object
+        lc = simulate_lightcurve(image, orbital_period, semimajor_axis,
+                                 impact_parameter, R_planet, R_star,
+                                 supersample_factor=4)
+
+        lcs.append(lc)
+        times.append(time)
+        bar.update()
 
 mid_transit = np.median(times)
 
@@ -64,6 +72,7 @@ mid_transit = np.median(times)
 time_chunks = []
 flux_chunks = []
 plt.figure()
+
 for lc, t in zip(lcs, times):
     condition = np.abs(lc.times - (mid_transit - t)) <= (cadence/2).to(u.day).value
     time_chunks.append(lc.times[condition])
