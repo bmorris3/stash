@@ -8,5 +8,6 @@ dependencies:
     - Cython
     - matplotlib
     - numpy
-#   - pip:
-#       - dependency_from_pip
+    - pip:
+        - configparser
+        - batman-package

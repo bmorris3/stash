@@ -1,3 +1,6 @@
+.. include:: ../references.txt
+
+
 ***************
 Getting Started
 ***************
@@ -107,7 +110,7 @@ of a transit of this planet on our image, ``image``::
     lc = simulate_lightcurve(image, orbital_period, semimajor_axis,
                              impact_parameter, R_planet, R_star)
 
-We can plot the light curve using the built-in plot function::
+We can plot the `~stash.LightCurve` object using the built-in plot function::
 
     # Plot the resulting light curve
     lc.plot()
@@ -155,7 +158,17 @@ Simulating a bunch of transits
 ------------------------------
 
 Now this time, let's iterate over impact parameter and see all of the different
-transit light curves we could get as we vary :math:`b \in [-1, 0]`:
+transit light curves we could get as we vary :math:`b \in [-1, 0]`::
+
+    # Iterate over a range of impact parameters:
+    for impact_parameter in np.arange(-0.8, 0, 0.05):
+        # Simulate a light curve for that system, return a `LightCurve` object
+        lc = simulate_lightcurve(image, orbital_period, semimajor_axis,
+                                 impact_parameter, R_planet, R_star)
+
+        # Plot the resulting light curve
+        lc.plot()
+
 
 .. plot::
 
