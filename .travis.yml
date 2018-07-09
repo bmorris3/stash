@@ -75,23 +75,16 @@ matrix:
         - os: linux
           env: SETUP_CMD='test --coverage'
 
-        # Check for sphinx doc build warnings - we do this first because it
-        # may run for a long time
-        - os: linux
-          env: SETUP_CMD='build_docs -w'
-
-        # Now try Astropy dev with the latest Python and LTS with Python 2.7 and 3.x.
-        - os: linux
-          env: ASTROPY_VERSION=lts
-
-        - os: linux
-          env: NUMPY_VERSION=1.12
-
         # Do a PEP8 test with pycodestyle
         - os: linux
           env: MAIN_CMD='pycodestyle stash --count' SETUP_CMD=''
 
     allow_failures:
+        # Check for sphinx doc build warnings - we do this first because it
+        # may run for a long time
+        - os: linux
+          env: SETUP_CMD='build_docs -w'
+
         # Do a PEP8 test with pycodestyle
         # (allow to fail unless your code completely compliant)
         - os: linux
