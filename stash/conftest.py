@@ -1,7 +1,7 @@
 # This file is used to configure the behavior of pytest when using the Astropy
 # test infrastructure.
 
-# Hack! 
+# Hack!
 from astropy.tests import pytest_plugins as astropy_pytest_plugins
 
 ## Uncomment the following line to treat all DeprecationWarnings as
