@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def simple_test():
+def test_simple():
 
     from ..lightcurve import LightCurve
 
