@@ -5,6 +5,9 @@ Solar Transits Acquired by SDO HMI
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
+.. image:: https://travis-ci.org/bmorris3/stash.svg?branch=master
+    :target: https://travis-ci.org/bmorris3/stash
+
 In development
 
 
