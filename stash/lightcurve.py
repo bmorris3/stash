@@ -1,6 +1,4 @@
-
 import numpy as np
-import batman
 import matplotlib.pyplot as plt
 from copy import deepcopy
 
@@ -50,6 +48,8 @@ class LightCurve(object):
         lc : `~stash.LightCurve`
             Best-fit transit model
         """
+        import batman
+
         def transit_model(p):
             rp, inc, t0, u1, u2 = p
 

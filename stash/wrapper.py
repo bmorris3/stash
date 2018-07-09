@@ -8,6 +8,7 @@ __all__ = ['simulate_lightcurve']
 from .lightcurve import LightCurve
 import warnings
 
+
 def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
                         background=269, R_star_physical=R_sun,
                         supersample_factor=1):
