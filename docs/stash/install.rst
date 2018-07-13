@@ -23,7 +23,7 @@ via pip like so::
 Once you have those installed, you can install the latest version of ``stash``
 by building from the source::
 
-    git clone git@github.com:bmorris3/stash.git
+    git clone https://github.com/bmorris3/stash.git
     cd stash
     python setup.py install
 

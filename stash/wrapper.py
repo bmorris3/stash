@@ -11,7 +11,7 @@ import warnings
 
 def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
                         background=269, R_star_physical=R_sun,
-                        supersample_factor=1):
+                        supersample_factor=1, sdo_hmi=True):
     """
     Simulate a light curve of a planet with radius ``R_planet_physical`` with
     orbital period ``period``,  semimajor axis ``a``, and assuming the Sun has
@@ -39,10 +39,11 @@ def simulate_lightcurve(image, period, a, b, R_planet_physical=R_earth,
     """
 
     # Replace nans with background value
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        image[np.isnan(image)] = np.percentile(image[(image < 500) &
-                                                     (image > 100)], 10)
+    if sdo_hmi:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            image[np.isnan(image)] = np.percentile(image[(image < 500) &
+                                                         (image > 100)], 10)
 
     # Measure apparent width of star in pixels
     diff = np.diff(np.sum(image, axis=1))
