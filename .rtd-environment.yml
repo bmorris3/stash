@@ -9,6 +9,6 @@ dependencies:
     - Cython
     - matplotlib
     - numpy
-    - sphinx_astropy
+    - sphinx-astropy
     - pip:
         - batman-package
