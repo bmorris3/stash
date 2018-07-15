@@ -1,16 +1,17 @@
 Solar Transits Acquired by SDO HMI
 ----------------------------------
 
+.. image:: https://travis-ci.org/bmorris3/stash.svg?branch=master
+    :target: https://travis-ci.org/bmorris3/stash
+ 
+.. image:: http://readthedocs.org/projects/astrostash/badge/?version=latest
+    :target: https://astrostash.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+ 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
-.. image:: http://readthedocs.org/projects/astrostash/badge/?version=latest
-    :target: https://astrostash.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
-.. image:: https://travis-ci.org/bmorris3/stash.svg?branch=master
-    :target: https://travis-ci.org/bmorris3/stash
 
 In development
 
