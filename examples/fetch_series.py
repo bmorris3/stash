@@ -8,9 +8,9 @@ from glob import glob
 from astropy.time import Time
 import numpy as np
 from astropy.utils.console import ProgressBar
+from datetime import datetime as dt_obj
+import drms
 
-# Set the HMI observing cadence (should be smaller than convective timescale)
-cadence = 5 * u.min
 # Set up planet parameters
 orbital_period = 365 * u.day
 semimajor_axis = 1 * u.AU
@@ -18,29 +18,30 @@ impact_parameter = 0.2
 R_planet = 1 * R_earth
 R_star = R_sun
 
-paths = glob('data/*continuum.fits')
+# determine the transit duration
+duration = transit_duration(R_star, R_planet, orbital_period, semimajor_axis, impact_parameter)
 
-# If you haven't already done the download...
-if len(paths) < 1:
-    # Download four hours worth of images from JSOC, at ``cadence``
-    client = jsoc.JSOCClient()
-    response = client.search(a.jsoc.Time('2013/5/13 00:00', '2013/5/13 23:59'),
-                             a.jsoc.Series('hmi.Ic_45s'),
-                             a.jsoc.Notify("brettmorris21@gmail.com"),
-                             a.vso.Sample(cadence))
-    print(response)
-    requests = client.request_data(response)
-    print(requests)
-    res = client.get_request(requests, path='data/.', max_conn=10)
-    res.wait(progress=True)
+# make a connection to the database
+c = drms.Client()
 
-    paths = glob('data/*continuum.fits')
-
+# query the FITS header keywords and the data arrays, or segments, separately:
+# setting the HMI observing cadence to 315 seconds (should be smaller than convective turnover time, which is ~10 minutes)
+keys, segments = c.query('hmi.Ic_45s[2013.05.13/1d@315s]', key=drms.const.all, seg='continuum')
+    
+# convert the time into a datetime object
+def parse_tai_string(tstr,datetime=True):
+    year   = int(tstr[:4])
+    month  = int(tstr[5:7])
+    day    = int(tstr[8:10])
+    hour   = int(tstr[11:13])
+    minute = int(tstr[14:16])
+    if datetime: return dt_obj(year,month,day,hour,minute)
+    else: return year,month,day,hour,minute
+    
+t_recs = np.array([parse_tai_string(keys.T_REC[i],datetime=True) for i in range(keys.T_REC.size)])    
+    
 lcs = []
 times = []
-
-duration = transit_duration(R_star, R_planet, orbital_period, semimajor_axis,
-                            impact_parameter)
 
 # number of frames needed for transit simulation:
 n_frames = int(float(duration/cadence))
@@ -49,13 +50,12 @@ n_frames = int(float(duration/cadence))
 with ProgressBar(n_frames) as bar:
 
     # Make a light curve for each image
-    for path in paths[:n_frames]:
-
-        # Open the image, the fastest way:
-        f = fits.open(path, memmap=False, lazy_load_hdus=True)
+    for i in range(len(segments)):
+        url = 'http://jsoc.stanford.edu' + segments.continuum[i]
+        f = fits.open(url, memmap=False, lazy_load_hdus=True)
         f[1].verify('silentfix')
         image = f[1].data
-        time = Time(f[1].header['DATE-OBS'], format='isot', scale='tai').jd
+        time = Time(t_recs[i], format='datetime', scale='tai').jd
 
         # Simulate a light curve for that system, return a `LightCurve` object
         lc = simulate_lightcurve(image, orbital_period, semimajor_axis,
@@ -91,6 +91,6 @@ np.savetxt('data/lc.txt', np.vstack([times, fluxes]).T)
 plt.plot(times, fluxes)
 plt.xlabel('Time [d]')
 plt.ylabel('Flux')
+
 # Show me the plot!
 plt.show()
-
