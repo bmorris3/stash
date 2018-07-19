@@ -15,7 +15,7 @@ R_planet = R_earth
 R_star = R_sun
 
 # Iterate over a range of impact parameters:
-for impact_parameter in np.arange(-0.8, 0.8, 0.1):
+for impact_parameter in np.arange(-1, 1, 0.1):
     # Simulate a light curve for that system, return a `LightCurve` object
     lc = simulate_lightcurve(image, orbital_period, semimajor_axis,
                              impact_parameter, R_planet, R_star)

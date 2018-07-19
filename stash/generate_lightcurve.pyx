@@ -1,6 +1,7 @@
 cimport cython
 import numpy as np
 cimport numpy as np
+from copy import copy
 
 __all__ = ['generate_lightcurve']
 
@@ -63,6 +64,8 @@ def generate_lightcurve(image, b_pixels, R_planet_pixels=17.26, background=269,
     cdef int planet_centroid_x, planet_centroid_y
 
     cdef int y_start, y_end, x_start, x_end
+    cdef int delta_y_lower = 0
+    cdef int delta_y_upper = 2*R_planet_pixels_upper
     cdef float sum_flux = 0
 
     unobscured_flux = image.sum()
@@ -86,7 +89,16 @@ def generate_lightcurve(image, b_pixels, R_planet_pixels=17.26, background=269,
         y_start = planet_center_y - R_planet_pixels_upper
         y_end = planet_center_y + R_planet_pixels_upper
 
-        obscured_flux = np.sum(image[y_start:y_end, x_start:x_end] * mask)
+        if y_start < 0:
+            delta_y_lower = copy(abs(y_start))
+            y_start = 0
+
+        if y_end > 4096:
+            delta_y_upper = copy(delta_y_upper - 4096)
+            y_end = 4096
+
+        obscured_flux = np.sum(image[y_start:y_end, x_start:x_end] *
+                               mask[delta_y_lower:delta_y_upper, :])
 
         fluxes[step] = (unobscured_flux - obscured_flux)
 
