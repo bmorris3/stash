@@ -12,3 +12,5 @@ dependencies:
     - sphinx-astropy
     - pip:
         - batman-package
+        - sphinx-automodapi
+        - numpydoc
