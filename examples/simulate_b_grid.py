@@ -4,9 +4,20 @@ from sunpy.map import Map
 from stash import simulate_lightcurve
 import matplotlib.pyplot as plt
 import numpy as np
+import drms
+from astropy.io import fits
 
-# Load image from the `fetch_and_plot_example.py` script
-image = Map('data/hmi_ic_45s_2013_05_13_15_56_15_tai_continuum.fits').data
+# make a connection to the database
+c = drms.Client()
+
+# Use drms to search for an SDO HMI continuum intensity image closest to the time below.
+# We query the FITS header keywords and the data arrays, or segments, separately:
+keys, segments = c.query(
+    'hmi.Ic_45s[2013.05.13]', key=drms.const.all, seg='continuum')
+
+# Download the file(s)
+url = 'http://jsoc.stanford.edu' + segments.continuum[0]
+image = fits.getdata(url)
 
 # Set up planet parameters
 orbital_period = 365 * u.day
@@ -25,5 +36,3 @@ for impact_parameter in np.arange(-1, 1, 0.1):
 
 # Show me the plot!
 plt.show()
-
-
