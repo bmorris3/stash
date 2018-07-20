@@ -44,6 +44,7 @@ lcs = []
 times = []
 
 # number of frames needed for transit simulation:
+cadence = 315 * u.second
 n_frames = int(float(duration/cadence))
 
 # Make a command line progress bar that shows estimated runtime:
